@@ -2,7 +2,7 @@
 
 _Introduction_ <br/>
 <br/>
-This repository contains data and code for the analyses and figures for the manuscript titled "Permafrost and rain influence hydrologic flowpaths in boreal catchments" by Karen L. Jorgenson, Thomas A. Douglas, M. Torre Jorgenson, Neal J. Pastick, and Tamara K. Harms.<br/>
+This repository contains data and code for the analyses and figures for the manuscript titled "Permafrost and rain influence summer hydrologic flowpaths in boreal catchments" by Karen L. Jorgenson, Thomas A. Douglas, M. Torre Jorgenson, Neal J. Pastick, and Tamara K. Harms.<br/>
 <br/>
 _Raw data files_ <br/>
 * All_mixing_data.csv: All data for source-waters and stream water samples included in the mixing models <br/>
