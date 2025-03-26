@@ -7,8 +7,8 @@ library(lubridate)
 all_dat <- read.csv("All_mixing_data.csv")
 
 ### MixSIAR models 4 sites
-k <- "STRT_2022"
-mix_d <- all_dat %>% filter(Site == "STRT", year == "2022") %>% select(Days_melt, Chloride_uM, Magnesium_uM)
+k <- "STRT_2020"
+mix_d <- all_dat %>% filter(Site == "STRT", year == "2020") %>% select(Days_melt, Chloride_uM, Magnesium_uM) %>% na.omit()
 
 
 

@@ -1,10 +1,10 @@
-### DoD Mixing Models
+### Mixing Models
 library(MixSIAR)
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 
-all_dat <- read.csv("mixing2/All_mixing_data_Fox.csv")
+all_dat <- read.csv("All_mixing_data.csv")
 
 ### MixSIAR models 4 sites
 k <- "FRCH_2015"
@@ -24,13 +24,13 @@ source_dat_means <- source_dat %>% group_by(Type) %>% summarise(n = length(Chlor
 
 
 
-write.csv(mix_d,paste("mixing2/mix_dat_", k, ".csv", sep = ""), 
+write.csv(mix_d,paste("mix_dat_", k, ".csv", sep = ""), 
           row.names = FALSE)
-write.csv(source_dat_means,paste("mixing2/source_dat_", k, ".csv", sep = ""), 
+write.csv(source_dat_means,paste("source_dat_", k, ".csv", sep = ""), 
           row.names = FALSE)
 
 # Load mixture data
-mix <- load_mix_data(filename=paste("mixing2/mix_dat_", k, ".csv", sep = ""),
+mix <- load_mix_data(filename=paste("mix_dat_", k, ".csv", sep = ""),
                      iso_names=c("Chloride_uM", "Magnesium_uM"),
                      factors= NULL,
                      fac_random= NULL,
@@ -40,7 +40,7 @@ mix <- load_mix_data(filename=paste("mixing2/mix_dat_", k, ".csv", sep = ""),
 
 # Load source data
 
-source <- load_source_data(filename=paste("mixing2/source_dat_", k, ".csv", sep = ""),
+source <- load_source_data(filename=paste("source_dat_", k, ".csv", sep = ""),
                            source_factors=NULL,
                            conc_dep=FALSE,
                            data_type="means",
@@ -53,15 +53,15 @@ row.names(discr) <- source$source_names
 names(discr) <- c(paste("Mean", names(source_dat)[2], sep = ""),paste("Mean", names(source_dat)[3], sep = ""),#paste("Mean", names(source_dat)[4], sep = ""),#,paste("Mean", names(source_dat)[5], sep = ""),
                   paste("SD", names(source_dat)[2], sep = ""),paste("SD", names(source_dat)[3], sep = ""))#,paste("SD", names(source_dat)[4], sep = ""))#, paste("SD", names(source_dat)[5], sep = ""))
 
-write.csv(discr,paste("mixing2/discr_", k, ".csv", sep = ""), 
+write.csv(discr,paste("discr_", k, ".csv", sep = ""), 
           row.names = TRUE)
-discr <-load_discr_data(filename=paste("mixing2/discr_", k, ".csv", sep = ""), 
+discr <-load_discr_data(filename=paste("discr_", k, ".csv", sep = ""), 
                         mix)
 discr
 
 
 # Write the JAGS model file
-model_filename <- paste("mixing2/MixSIAR_model_", k, sep = "")   # Name of the JAGS model file
+model_filename <- paste("MixSIAR_model_", k, sep = "")   # Name of the JAGS model file
 resid_err <- TRUE
 process_err <- TRUE # Water may come from one section of the source distribution
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
@@ -71,6 +71,6 @@ jags.1 <- run_model(run="extreme", mix, source, discr, model_filename,
                     alpha.prior = 1, resid_err, process_err)
 
 
-save.image(file = paste("mixing2/", k,"_com_snw.RData", sep = ""))
+save.image(file = paste(k,"_com_snw.RData", sep = ""))
 
 

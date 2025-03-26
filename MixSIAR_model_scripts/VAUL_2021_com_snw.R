@@ -4,7 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(lubridate)
 
-all_dat <- read.csv("All_mixing_data_Fox.csv")
+all_dat <- read.csv("All_mixing_data.csv")
 
 
 ### Model
