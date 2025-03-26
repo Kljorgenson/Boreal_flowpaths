@@ -12,7 +12,7 @@ library(grid)
 
 ## Load model data from individual model files
 # Set output options for MixSIAR models
-output_options <- list(summary_save = TRUE,
+output_ops <- list(summary_save = TRUE,
                        summary_name = "summary_statistics",
                        sup_post = TRUE,
                        plot_post_save_pdf = FALSE,
@@ -47,7 +47,7 @@ models
 posts <- lapply(models, function(x){
   load(paste0("MixSIAR_model_output/", x, "_com_snw.RData"))
   
-  posts <- output_posteriors(jags.1, mix, source, output_options)
+  posts <- output_posteriors(jags.1, mix, source, output_ops)
  
    })
 
@@ -55,14 +55,14 @@ posts <- lapply(models, function(x){
 stats <- lapply(models, function(x){
   load(paste0("MixSIAR_model_output/", x, "_com_snw.RData"))
   
-  stats <- data.frame(output_stats(jags.1, mix, source, output_options))
+  stats <- data.frame(output_stats(jags.1, mix, source, output_ops))
 })
 
 # Diagnostics
 diags <- lapply(models, function(x){
   load(paste0("MixSIAR_model_output/", x, "_com_snw.RData"))
 
-  diags <- do.call(cbind, output_diagnostics(jags.1, mix, source, output_options))
+  diags <- do.call(cbind, output_diagnostics(jags.1, mix, source, output_ops))
   })
 
 
@@ -131,19 +131,19 @@ plot.list <- list(F.2022, F.2021, F.2020, F.2019, F.2018, F.2015, M.2022, M.2021
 # Arrange plots in grid
 p.post <- ggarrange(plotlist = plot.list,
                     common.legend = F, legend = "none", ncol = 6, nrow = 5,
-                    widths = c(70,50,50,50,50,50), heights = c(130,100,100,100,125))
+                    widths = c(60,50,50,50,50,50), heights = c(110,100,100,100,105))
 
 # Annotate plots with axis labels and sites
 p.post.1 <- annotate_figure(p.post, bottom = text_grob("       Proportion", size = 30))
-p.post.3 <- annotate_figure(p.post.1, right = text_grob("French", size = 30, rot = 270, hjust = 4.7, vjust = -0.1))
-p.post.3 <- annotate_figure(p.post.3, right = text_grob("Moose", size = 30, rot = 270, hjust = 2.8, vjust = 1.3))
-p.post.3 <- annotate_figure(p.post.3, right = text_grob("Poker", size = 30, rot = 270, hjust = .5, vjust = 20.5))
-p.post.3 <- annotate_figure(p.post.3, right = text_grob("Stuart", size = 30, rot = 270, hjust = -1.8, vjust = 21.9))
-p.post.3 <- annotate_figure(p.post.3, right = text_grob("Vault", size = 30, rot = 270, hjust = -4.8, vjust = 23.1))
-p.post.4 <- annotate_figure(p.post.3, left = text_grob("Scaled Posterior Density", size = 30, rot = 90, vjust = -0.05))
+p.post.3 <- annotate_figure(p.post.1, right = text_grob("French", size = 30, rot = 270, hjust = 5.7, vjust = -0.1))
+p.post.3 <- annotate_figure(p.post.3, right = text_grob("Moose", size = 30, rot = 270, hjust = 3.4, vjust = 1.3))
+p.post.3 <- annotate_figure(p.post.3, right = text_grob("Poker", size = 30, rot = 270, hjust = 0.5, vjust = 22))
+p.post.3 <- annotate_figure(p.post.3, right = text_grob("Stuart", size = 30, rot = 270, hjust = -2.5, vjust = 23.4))
+p.post.3 <- annotate_figure(p.post.3, right = text_grob("Vault", size = 30, rot = 270, hjust = -6.5, vjust = 24.6))
+p.post.4 <- annotate_figure(p.post.3, left = text_grob("Scaled Posterior Density", size = 30, rot = 90))
 
 # Export plot
-ggexport(plot = p.post.4, filename = "Figures/Post plot window.png", height = 1300, width = 1600)
+ggexport(plot = p.post.4, filename = "Figures/Post plot window.png", height = 1300, width = 1600,bg = 'white')
 
 
 
@@ -180,8 +180,10 @@ p_wrap
 ggsave(here("Figures/Mean and CI window long.png"), width = 4.5, height = 5.5)
 
 
-# Calculate difference among years
-summary.dat %>% group_by(Site, Source) %>% summarise(diff = max(Mean) - min(Mean))
+# Calculate ranges for annual proportions
+summary.dat %>% filter(Site != "VAUL") %>% group_by(Source) %>% summarise(min = min(Mean), max = max(Mean))
+summary.dat %>% filter(Site == "VAUL") %>% group_by(Source) %>% summarise(min = min(Mean), max = max(Mean))
 
 # Export summary statistics data
 write.csv(summary.dat, "Output_data/All_summary_data.csv", row.names = F)
+
